@@ -50,6 +50,7 @@ func LoadConfiguration(file string) (GlobalConfig, error) {
 	return configuration, err
 }
 
+// Interface used to sort structs.
 type Interface interface {
 	// Len is the number of elements in the collection.
 	Len() int
@@ -60,23 +61,24 @@ type Interface interface {
 	Swap(i, j int)
 }
 
+// FileList represents a file in filesystem.
 type FileList struct {
-	path          string
-	name          string
-	fullPath      string
-	size          int64
-	lastWriteTime time.Time
-	md5           string
+	path          string    // Directory
+	name          string    // FileName
+	fullPath      string    // FullPath = Directory + FileName
+	size          int64     // FileSize
+	lastWriteTime time.Time // Last Write Time
+	md5           string    // MD5 checksum
 }
 
-// Implementa um tipo usado para ordenar a lista de arquivos
+// ByFileSize Represents a list of FileList and is used to sort by file Size
 type ByFileSize []FileList
 
 func (a ByFileSize) Len() int           { return len(a) }
 func (a ByFileSize) Less(i, j int) bool { return a[i].size < a[j].size }
 func (a ByFileSize) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 
-// FileConfig é a representacao de uma configuração de processamento de arquivo
+// FileConfig represents an user configuration to processing a file
 type FileConfig struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
@@ -90,14 +92,14 @@ type FileConfig struct {
 	Tasks []Task `json:"tasks"`
 }
 
-// Task é o tipo de tarefa que será executada para o arquivo.
+// Task represents a task to be executed to a file
 type Task struct {
 	Order      int                 `json:"order"`
 	Type       string              `json:"type"`
 	Parameters []map[string]string `json:"parameters"`
 }
 
-// TaskTypeFileRemove Representa uma tarefa de demoção de arquivo
+// TaskTypeFileRemove represents a remove task for a file
 type TaskTypeFileRemove struct {
 	file string
 }
@@ -258,10 +260,10 @@ func init() {
 
 	log.SetOutput(&lumberjack.Logger{
 		Filename:   globalConfig.Logging.Path,
-		MaxSize:    1, // megabytes
-		MaxBackups: 6,
-		MaxAge:     28,   //days
-		Compress:   true, // disabled by default
+		MaxSize:    globalConfig.Logging.MaxSize, // megabytes
+		MaxBackups: globalConfig.Logging.MaxBackups,
+		MaxAge:     globalConfig.Logging.MaxAge,   //days
+		Compress:   globalConfig.Logging.Compress, // disabled by default
 	})
 
 }
