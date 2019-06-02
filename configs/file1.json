@@ -1,0 +1,32 @@
+{
+  "id": "1",
+  "name": "Name of the file.",
+  "description": "Description for documentation purposes.",
+  "enabled": true,
+  "watch": {
+    "path": "D:/",
+    "regex": "^(example.log)$",
+    "recursive": false
+  },
+  "tasks": [
+    {
+      "order": 1,
+      "type": "FileMove",
+      "parameters": [
+        {
+          "source": "D:/${THIS}$",
+          "destination": "D:/back/${THIS}$"
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "type": "FileDelete",
+      "parameters": [
+        {
+          "file": "${THIS}$"
+        }
+      ]
+    }
+  ]
+}
