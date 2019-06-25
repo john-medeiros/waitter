@@ -1,0 +1,32 @@
+{
+  "id": "2",
+  "name": "Arquivo zip exemplo",
+  "description": "Description for documentation purposes.",
+  "enabled": true,
+  "watch": {
+    "path": "D:/",
+    "regex": "^(teste.zip)$",
+    "recursive": false
+  },
+  "tasks": [
+    {
+      "order": 1,
+      "type": "FileUnzip",
+      "parameters": [
+        {
+          "source": "D:/${THIS}$",
+          "destination": "D:/back/${THIS}$"
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "type": "FileDelete",
+      "parameters": [
+        {
+          "file": "${THIS}$"
+        }
+      ]
+    }
+  ]
+}
